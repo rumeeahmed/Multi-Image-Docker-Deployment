@@ -5,11 +5,14 @@ before_install:
 script:
   - docker run -e CI=true rumeeahmed/react-test npm test
 after_success:
+  #  Build the Images
   - docker build -t rumeeahmed/multi-client ./client
   - docker build -t rumeeahmed/multi-nginx ./nginx
   - docker build -t rumeeahmed/multi-server ./server
   - docker build -t rumeeahmed/multi-worker ./worker
+  # Login to Docker
   - docker login -u "$DOCKER_ID" -p "$DOCKER_PASSWORD"
+  # Push the images to Docker Hub
   - docker push rumeeahmed/multi-client
   - docker push rumeeahmed/multi-nginx
   - docker push rumeeahmed/multi-server
