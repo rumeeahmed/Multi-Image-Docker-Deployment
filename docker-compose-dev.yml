@@ -8,8 +8,9 @@ services:
         image:
             'redis:latest'
     api:
-        image: 'rumeeahmed/multi-server'
-        mem_limit: 128m
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./server
         volumes:
             - /app/node_modules
             - ./server:/app
@@ -21,14 +22,16 @@ services:
             - POSTGRES_PASSWORD=postgres_password
     client:
         stdin_open: true
-        image: rumeeahmed/multi-client
-        mem_limit: 128m
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./client
         volumes:
             - /app/node_modules
             - ./client:/app
     worker:
-        image: 'rumeeahmed/multi-worker'
-        mem_limit: 128m
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./worker
         volumes:
             - /app/node_modules
             - ./worker:/app
@@ -40,7 +43,8 @@ services:
         - api
         - client
         restart: always
-        image: 'rumeeahmed/multi-nginx'
-        mem_limit: 128m
-        ports:
-            - '80:80'
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./nginx
+        ports: 
+            - '3000:80'
