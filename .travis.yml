@@ -18,3 +18,14 @@ after_success:
   - docker push rumeeahmed/multi-server
   - docker push rumeeahmed/multi-worker
 language: generic
+deploy:
+    provider: elasticbeanstalk
+    region: "us-east-2"
+    app: "Multi-Docker"
+    env: "Multidocker-env-1"
+    bucket_name: "elasticbeanstalk-us-east-2-915091059854"
+    bucket_path: "Multi-Docker"
+    on:
+        branch: main
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
